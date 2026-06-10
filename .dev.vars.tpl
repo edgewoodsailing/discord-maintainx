@@ -20,3 +20,9 @@ DISCORD_GUILD_ID="1082678070630174790"
 MAINTAINX_API_TOKEN="op://Automation/maintainx-discord/credential"
 # Only needed if the token has access to multiple organizations
 MAINTAINX_ORG_ID=""
+
+# Status announcements (phase 2) — leave empty to disable.
+# Discord channel webhook: #boat-status > Edit Channel > Integrations > Webhooks
+DISCORD_WEBHOOK_URL="op://Automation/discord-maintainx-bot/channel-webhook-url"
+# Printed once by `npm run subscriptions -- create`; store it, then push
+MAINTAINX_WEBHOOK_SECRET="op://Automation/maintainx-discord/webhook-secret"

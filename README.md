@@ -97,6 +97,30 @@ instructor/tutor role IDs in `ALLOWED_ROLE_IDS` in `wrangler.jsonc`, then
 `npm run deploy` again. (Get IDs by right-clicking the channel/role with
 Developer Mode enabled.)
 
+## Status announcements (phase 2)
+
+MaintainX webhooks notify the worker (on `POST /maintainx`, HMAC-verified)
+when a work request changes status; approvals, rejections, and completions
+for whitelisted boats are posted to the channel via a Discord channel
+webhook. Setup:
+
+1. In Discord: **#boat-status → Edit Channel → Integrations → Webhooks →
+   New Webhook**, copy the webhook URL into 1Password.
+2. Create the MaintainX subscription (prints the signing secret once —
+   store it in 1Password):
+
+   ```sh
+   op run --env-file=.dev.vars.tpl -- npm run subscriptions -- create
+   ```
+
+3. Update the `op://` references in `.dev.vars.tpl` if needed, then push
+   both new secrets: `op run --env-file=.dev.vars.tpl -- ./scripts/push-secrets.sh`
+
+Until `DISCORD_WEBHOOK_URL` and `MAINTAINX_WEBHOOK_SECRET` are set, the
+`/maintainx` endpoint answers 503 and the feature is simply off. Status
+changes for assets not in `src/boats.json` are ignored, so youth-program
+activity never reaches the channel.
+
 ## Day-to-day
 
 | Task | Command |

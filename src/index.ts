@@ -22,11 +22,10 @@ import {
   verifyDiscordRequest,
 } from './discord';
 import { createWorkRequest, uploadWorkRequestAttachment } from './maintainx';
+import { handleMaintainXWebhook, type WebhookEnv } from './maintainx-webhook';
 
-interface Env {
+interface Env extends WebhookEnv {
   DISCORD_PUBLIC_KEY: string;
-  MAINTAINX_API_TOKEN: string;
-  MAINTAINX_ORG_ID?: string;
   ALLOWED_CHANNEL_IDS?: string;
   ALLOWED_ROLE_IDS?: string;
 }
@@ -46,6 +45,10 @@ export default {
   async fetch(request, env, ctx): Promise<Response> {
     if (request.method !== 'POST') {
       return new Response('discord-maintainx bridge is running', { status: 200 });
+    }
+
+    if (new URL(request.url).pathname === '/maintainx') {
+      return handleMaintainXWebhook(request, env, ctx);
     }
 
     const { valid, body } = await verifyDiscordRequest(request, env.DISCORD_PUBLIC_KEY);

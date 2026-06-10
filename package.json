@@ -8,7 +8,8 @@
     "deploy": "wrangler deploy",
     "check": "tsc -p tsconfig.json && tsc -p tsconfig.scripts.json",
     "register-commands": "tsx scripts/register-commands.ts",
-    "list-assets": "tsx scripts/list-assets.ts"
+    "list-assets": "tsx scripts/list-assets.ts",
+    "subscriptions": "tsx scripts/subscriptions.ts"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250601.0",
