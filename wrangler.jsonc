@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "discord-maintainx",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-06-01",
+  "vars": {
+    // Comma-separated Discord channel IDs where /request is allowed.
+    // Empty string = allowed in any channel.
+    "ALLOWED_CHANNEL_IDS": "",
+    // Comma-separated Discord role IDs allowed to use /request.
+    // Empty string = no role restriction.
+    "ALLOWED_ROLE_IDS": ""
+  }
+  // Secrets (set with scripts/push-secrets.sh, never committed):
+  //   DISCORD_PUBLIC_KEY   - Discord app public key (General Information page)
+  //   MAINTAINX_API_TOKEN  - MaintainX API key (Settings > Integrations > API Keys)
+  //   MAINTAINX_ORG_ID     - only needed if the MaintainX token spans multiple orgs
+}
