@@ -146,6 +146,20 @@ export async function editOriginalResponse(
   );
 }
 
+// Post a public follow-up message in the interaction's channel. Mentions are
+// rendered but never ping.
+export async function followupMessage(
+  applicationId: string,
+  token: string,
+  content: string,
+): Promise<void> {
+  await fetch(`https://discord.com/api/v10/webhooks/${applicationId}/${token}`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ content, allowed_mentions: { parse: [] } }),
+  });
+}
+
 // Flatten a MODAL_SUBMIT component tree (Label and Action Row wrappers) into
 // a map of custom_id -> leaf input.
 export function collectModalValues(

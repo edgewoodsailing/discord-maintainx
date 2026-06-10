@@ -11,6 +11,7 @@ import {
   displayName,
   editOriginalResponse,
   ephemeralMessage,
+  followupMessage,
   type Interaction,
   InteractionCallbackType,
   InteractionType,
@@ -185,6 +186,7 @@ function handleModalSubmit(interaction: Interaction, env: Env, ctx: ExecutionCon
       boatName,
       photos,
       requester: displayName(user),
+      requesterId: user?.id,
     }),
   );
   return interactionResponse({
@@ -200,6 +202,7 @@ interface Submission {
   boatName: string;
   photos: DiscordAttachment[];
   requester: string;
+  requesterId?: string;
 }
 
 async function fileWorkRequest(interaction: Interaction, env: Env, sub: Submission): Promise<void> {
@@ -225,9 +228,18 @@ async function fileWorkRequest(interaction: Interaction, env: Env, sub: Submissi
       }
     }
 
-    message = `✅ Work request filed for **${sub.boatName}**: “${sub.title}”`;
-    if (uploaded > 0) message += ` with ${uploaded} photo${uploaded === 1 ? '' : 's'}`;
-    message += '. The maintenance team will review it.';
+    // Announce the request publicly in the channel; keep the ephemeral
+    // reply as a receipt (and the only place upload problems are shown).
+    const who = sub.requesterId ? `<@${sub.requesterId}>` : sub.requester;
+    let announcement = `🛠️ ${who} filed a repair request for **${sub.boatName}**: “${sub.title}”`;
+    if (uploaded > 0) announcement += ` (${uploaded} photo${uploaded === 1 ? '' : 's'})`;
+    if (sub.description) {
+      const excerpt = sub.description.length > 300 ? `${sub.description.slice(0, 300)}…` : sub.description;
+      announcement += `\n> ${excerpt.replace(/\n/g, '\n> ')}`;
+    }
+    await followupMessage(interaction.application_id, interaction.token, announcement);
+
+    message = '✅ Filed with MaintainX — the maintenance team will review it.';
     if (failed.length > 0) {
       message += `\n⚠️ Could not attach: ${failed.join(', ')}. You can add photos in MaintainX.`;
     }
