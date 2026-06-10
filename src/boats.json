@@ -1,3 +1,42 @@
 [
-  { "name": "Example Boat — replace with real assets", "assetId": 0 }
+  {
+    "name": "Boat 1",
+    "assetId": 1554853
+  },
+  {
+    "name": "Boat 2",
+    "assetId": 1554854
+  },
+  {
+    "name": "Boat 3",
+    "assetId": 1554852
+  },
+  {
+    "name": "Boat 4",
+    "assetId": 1554855
+  },
+  {
+    "name": "Boat 6 \"Harmony\"",
+    "assetId": 1554856
+  },
+  {
+    "name": "Big White",
+    "assetId": 1554858
+  },
+  {
+    "name": "Craneberry",
+    "assetId": 4908295
+  },
+  {
+    "name": "Last Hour",
+    "assetId": 1554886
+  },
+  {
+    "name": "Mary Ann",
+    "assetId": 1554859
+  },
+  {
+    "name": "Plumb Comfy",
+    "assetId": 1554890
+  }
 ]
