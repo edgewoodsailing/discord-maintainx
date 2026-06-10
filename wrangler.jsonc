@@ -6,10 +6,10 @@
   "vars": {
     // Comma-separated Discord channel IDs where /request is allowed.
     // Empty string = allowed in any channel.
-    "ALLOWED_CHANNEL_IDS": "",
+    "ALLOWED_CHANNEL_IDS": "1246513888539705414", // #boat-status
     // Comma-separated Discord role IDs allowed to use /request.
     // Empty string = no role restriction.
-    "ALLOWED_ROLE_IDS": ""
+    "ALLOWED_ROLE_IDS": "1082764685981524029,1082765118770774026" // instructors, tutors
   }
   // Secrets (set with scripts/push-secrets.sh, never committed):
   //   DISCORD_PUBLIC_KEY   - Discord app public key (General Information page)
