@@ -136,7 +136,7 @@ export async function editOriginalResponse(
   token: string,
   content: string,
 ): Promise<void> {
-  await fetch(
+  const res = await fetch(
     `https://discord.com/api/v10/webhooks/${applicationId}/${token}/messages/@original`,
     {
       method: 'PATCH',
@@ -144,20 +144,31 @@ export async function editOriginalResponse(
       body: JSON.stringify({ content }),
     },
   );
+  if (!res.ok) {
+    console.log(`edit original response failed: HTTP ${res.status}`, await res.text());
+  }
 }
 
 // Post a public follow-up message in the interaction's channel. Mentions are
 // rendered but never ping.
+//
+// Must only be called AFTER the original (deferred) response has been
+// edited: until then Discord treats this endpoint as edit-original for
+// backwards compatibility, and the message inherits the original's
+// ephemerality instead of being posted publicly.
 export async function followupMessage(
   applicationId: string,
   token: string,
   content: string,
 ): Promise<void> {
-  await fetch(`https://discord.com/api/v10/webhooks/${applicationId}/${token}`, {
+  const res = await fetch(`https://discord.com/api/v10/webhooks/${applicationId}/${token}`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ content, allowed_mentions: { parse: [] } }),
   });
+  if (!res.ok) {
+    console.log(`followup message failed: HTTP ${res.status}`, await res.text());
+  }
 }
 
 // Flatten a MODAL_SUBMIT component tree (Label and Action Row wrappers) into

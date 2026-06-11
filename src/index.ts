@@ -210,6 +210,7 @@ interface Submission {
 
 async function fileWorkRequest(interaction: Interaction, env: Env, sub: Submission): Promise<void> {
   let message: string;
+  let announcement: string | undefined;
   try {
     const id = await createWorkRequest(env, {
       title: sub.title,
@@ -234,13 +235,12 @@ async function fileWorkRequest(interaction: Interaction, env: Env, sub: Submissi
     // Announce the request publicly in the channel; keep the ephemeral
     // reply as a receipt (and the only place upload problems are shown).
     const who = sub.requesterId ? `<@${sub.requesterId}>` : sub.requester;
-    let announcement = `🛠️ ${who} filed a repair request for **${sub.boatName}**: “${sub.title}”`;
+    announcement = `🛠️ ${who} filed a repair request for **${sub.boatName}**: “${sub.title}”`;
     if (uploaded > 0) announcement += ` (${uploaded} photo${uploaded === 1 ? '' : 's'})`;
     if (sub.description) {
       const excerpt = sub.description.length > 300 ? `${sub.description.slice(0, 300)}…` : sub.description;
       announcement += `\n> ${excerpt.replace(/\n/g, '\n> ')}`;
     }
-    await followupMessage(interaction.application_id, interaction.token, announcement);
 
     message = '✅ Filed with MaintainX — the maintenance team will review it.';
     if (failed.length > 0) {
@@ -250,5 +250,11 @@ async function fileWorkRequest(interaction: Interaction, env: Env, sub: Submissi
     const reason = err instanceof Error ? err.message : String(err);
     message = `❌ Sorry, the request could not be filed (${reason}). Please try again, or report the issue directly in MaintainX.`;
   }
+
+  // Order matters: editing the original deferred response must come first —
+  // see the note on followupMessage.
   await editOriginalResponse(interaction.application_id, interaction.token, message);
+  if (announcement) {
+    await followupMessage(interaction.application_id, interaction.token, announcement);
+  }
 }
