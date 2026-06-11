@@ -50,10 +50,15 @@ async function validSignature(
   return diff === 0;
 }
 
-// Hunt for a work request ID in an undocumented event shape.
+// Extract the work request ID. The observed WORK_REQUEST_STATUS_CHANGE
+// payload is flat:
+//   {"newStatus":"APPROVED","oldStatus":"PENDING","occurredAt":"...",
+//    "orgId":99411,"requestId":12249562}
+// The fallbacks below cover other shapes in case the format varies.
 function findWorkRequestId(event: unknown): number | undefined {
   if (typeof event !== 'object' || event === null) return undefined;
   const obj = event as Record<string, unknown>;
+  if (typeof obj.requestId === 'number') return obj.requestId;
   if (typeof obj.workRequestId === 'number') return obj.workRequestId;
   for (const key of ['workRequest', 'newWorkRequest']) {
     const wr = obj[key];

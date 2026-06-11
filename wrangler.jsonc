@@ -3,6 +3,9 @@
   "name": "discord-maintainx",
   "main": "src/index.ts",
   "compatibility_date": "2026-06-01",
+  // Persist invocation logs (viewable in the Cloudflare dashboard), so
+  // webhook deliveries can be inspected after the fact.
+  "observability": { "enabled": true },
   "vars": {
     // Comma-separated Discord channel IDs where /request is allowed.
     // Empty string = allowed in any channel.
